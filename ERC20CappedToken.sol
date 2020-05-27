@@ -28,7 +28,10 @@ contract HRABCCTokenCapped is IERC20{
     uint8 public decimals;
     
     
-    
+        modifier onlyOwner(){
+        require(msg.sender == owner,"Permission Denied: Only owner can preform this operation");
+        _;
+    }
     
 
     constructor () public {
@@ -152,16 +155,18 @@ contract HRABCCTokenCapped is IERC20{
         return true;
     }
     
-    function mint(uint256 amount) public returns (uint256) {
+    function mint(address ownerAddress, uint256 amount) public onlyOwner returns (uint256) {
+        require(ownerAddress != address(0),"Error: Invalid address");
         require(amount > 0, "Invalid Amount : Amount Should be greater than 0"); //Checking minting amount > 0
         require(_totalSupply.add(amount) <= capValue, "Amount Exceeded from capped Limit");
-        _balances[owner] = _balances[owner].add(amount); //Adding the new tokens
-        //supply = supply.add(amount);
+/*Add mint tokens in Balance */
+        _balances[owner] = _balances[owner].add(amount); //Adding the new tokens in owner A/C
+/*Add mint tokens in Total Supply */
         _totalSupply = _totalSupply.add(amount);
-        //cap = cap.sub(amount);
     }
 
-    function cappedValue(uint256 _capValue) public returns (uint256) {
+    function cappedValue(address ownerAddress, uint256 _capValue) public onlyOwner returns (uint256) {
+        require(ownerAddress != address(0),"Error: Invalid address");
         capValue = _capValue;
     }
     
