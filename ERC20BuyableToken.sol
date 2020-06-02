@@ -1,8 +1,8 @@
 pragma solidity ^0.6.0;
-import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC20/SafeERC20.sol";
+import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC20/SafeERC20.sol"; //why you have imported this file?
 import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
-import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/math/SafeMath.sol";
-import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/utils/Address.sol";
+import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/math/SafeMath.sol"; //why you have imported this file? not use safemath anywhere
+import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/utils/Address.sol"; //why you have imported this file?
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -424,11 +424,12 @@ contract HRABCCBuyableToken is IERC20 {
         require(tokenReciver != address(0));
         require(msg.value > 0,"Either value must be greaterthan 0");
         require(!isContract(tokenReciver),"Please select EOA to perform transaction"); // EOA account confirmation
-        
+        //You can easily use as noOfTokens = tokenPrice.mul(msg.value);
         noOfTokens = SafeMath.mul(msg.value,tokenPrice); // calculate no of tokens to be issued depending on the price of Token
         
-        require(_balances[owner] > noOfTokens,"Requested token are greater than owner's balance");
         
+        require(_balances[owner] > noOfTokens,"Requested token are greater than owner's balance");
+        //why rest of the place you haven't us safemath?
         _balances[owner] -= noOfTokens; //Token minus from owner balance 
         _balances[tokenReciver] += noOfTokens; //Token plus in reciver balance 
         
